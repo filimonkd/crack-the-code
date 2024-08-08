@@ -1,14 +1,12 @@
 import { useState } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
   const handleLogin = () => {
-    window.location.href = `${
-      import.meta.env.VITE_BACKEND_URL
-    }/api/auth/telegram`;
+    const url = `https://oauth.telegram.org/auth?bot_id=${import.meta.env.VITE_ID}&origin=${window.location.origin}&embed=0`;
+    window.open(url, "_blank", "width=500,height=500");
   };
-
   return (
     <>
       <div className="flex justify-center items-center h-screen">

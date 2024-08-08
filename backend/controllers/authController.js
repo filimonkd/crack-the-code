@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const { checkTelegramAuth } = require('../utils/telegramAuth');
-
 exports.telegramAuth = (req, res) => {
     const { hash, ...telegramData } = req.query;
-    
+
+    console.log('Received data:', telegramData);
+    console.log('Received hash:', hash);
+
     // Verify the Telegram authentication
     const isAuthenticated = checkTelegramAuth(telegramData, hash);
     

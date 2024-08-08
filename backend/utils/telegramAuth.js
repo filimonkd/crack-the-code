@@ -6,7 +6,13 @@ exports.checkTelegramAuth = (data, hash) => {
         .sort()
         .map((key) => (`${key}=${data[key]}`))
         .join('\n');
+    
     const hmac = crypto.createHmac('sha256', secret).update(checkString).digest('hex');
     
+    // Debugging output
+    console.log('Check String:', checkString);
+    console.log('Generated HMAC:', hmac);
+    console.log('Received Hash:', hash);
+
     return hmac === hash;
 };
