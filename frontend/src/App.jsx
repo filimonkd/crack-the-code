@@ -1,18 +1,19 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import TelegramLogin from './TeleLogin';
-import Dashboard from './Dashboard';
-import { isAuthenticated } from '../utils/auth';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import GameLobby from "./GameLobby";
+import GamePlay from "./GamePlay";
+import ResultScreen from "./ResultScreen";
 
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={isAuthenticated() ? <Dashboard /> : <TelegramLogin />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<GameLobby />} />
+        <Route path="/play" element={<GamePlay />} />
+        <Route path="/result" element={<ResultScreen />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
