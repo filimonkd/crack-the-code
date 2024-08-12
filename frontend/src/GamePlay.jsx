@@ -16,15 +16,16 @@ function GamePlay() {
   useEffect(() => {
     if (lastJsonMessage) {
       const { type, data } = lastJsonMessage;
+  
       if (type === 'feedback') {
-        setFeedback(data.feedback);
-        if (data.feedback === 'Perfect match!') {
-          setWinner(data.winner);
-          navigate('/result');
-        }
+        setFeedback(data.feedback); // Update feedback state
+      } else if (type === 'result') {
+        setWinner(data.winner); // Update winner state
+        navigate('/result'); // Navigate to result screen
       }
     }
   }, [lastJsonMessage, navigate]);
+  
 
   const handleLockIn = () => {
     if (playerCode.length !== 4) {
