@@ -5,7 +5,7 @@ import useWebSocket from 'react-use-websocket';
 function GameLobby() {
   const [gameId, setGameId] = useState('');
   const navigate = useNavigate();
-  const { sendMessage } = useWebSocket('ws://localhost:8080');
+  const { sendMessage } = useWebSocket('ws://127.0.0.1:8080');
 
   const handleJoinGame = () => {
     sendMessage(JSON.stringify({

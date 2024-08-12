@@ -11,7 +11,7 @@ function GamePlay() {
   const [winner, setWinner] = useState(null);
   const navigate = useNavigate();
 
-  const { sendMessage, lastJsonMessage } = useWebSocket('ws://localhost:8080');
+  const { sendMessage, lastJsonMessage } = useWebSocket('ws://127.0.0.1:8080');
 
   useEffect(() => {
     if (lastJsonMessage) {
