@@ -16,22 +16,26 @@ function GamePlay() {
   useEffect(() => {
     if (lastJsonMessage) {
       const { type, data } = lastJsonMessage;
-  
+
       if (type === 'feedback') {
-        setFeedback(data.feedback); // Update feedback state
+        setFeedback(data.feedback);
+        if (data.winner) {
+          setWinner(data.winner);
+          navigate('/result');
+        }
       } else if (type === 'result') {
-        setWinner(data.winner); // Update winner state
-        navigate('/result'); // Navigate to result screen
+        setWinner(data.winner);
+        navigate('/result');
       }
     }
   }, [lastJsonMessage, navigate]);
-  
 
   const handleLockIn = () => {
     if (playerCode.length !== 4) {
       alert('Please enter a valid 4-digit code!');
       return;
     }
+    alert(gameId);
     sendMessage(JSON.stringify({
       type: 'lockIn',
       gameId,
@@ -39,6 +43,7 @@ function GamePlay() {
       data: { code: playerCode },
     }));
     alert('Your code is locked in!');
+    alert(gameId);
   };
 
   const handleGuess = () => {
@@ -85,7 +90,7 @@ function GamePlay() {
             </button>
           </div>
           <div className="mb-4">
-            <p>{feedback}</p>
+            <p>Feedback: {feedback}</p>
             <p>Attempts: {attempts}</p>
           </div>
         </>

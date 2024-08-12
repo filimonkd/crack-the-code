@@ -8,20 +8,29 @@ wss.on('connection', (ws) => {
     const parsedMessage = JSON.parse(message);
     const { type, gameId, playerId, data } = parsedMessage;
 
+    console.log(`Received message of type ${type} from ${playerId} in game ${gameId}`);
+
     switch (type) {
       case 'createGame':
         games[gameId] = { player1: playerId, player2: null, code: null };
+        console.log(`Game ${gameId} created by ${playerId}`);
         break;
 
       case 'joinGame':
         if (games[gameId]) {
           games[gameId].player2 = playerId;
+          console.log(`Player ${playerId} joined game ${gameId}`);
+        } else {
+          console.log(`Game ${gameId} does not exist`);
         }
         break;
 
       case 'lockIn':
         if (games[gameId]) {
           games[gameId].code = data.code;
+          console.log(`Player ${playerId} locked in code for game ${gameId}`);
+        } else {
+          console.log(`Game ${gameId} does not exist`);
         }
         break;
 
@@ -30,8 +39,17 @@ wss.on('connection', (ws) => {
           const feedback = evaluateGuess(data.guess, games[gameId].code);
           const winner = feedback === 'Perfect match!' ? playerId : null;
 
+          console.log(`Player ${playerId} guessed ${data.guess} in game ${gameId}. Feedback: ${feedback}`);
+
           // Send feedback to both players
           ws.send(JSON.stringify({ type: 'feedback', gameId, playerId, data: { feedback, winner } }));
+
+          // Notify the opponent if there is a winner
+          if (winner) {
+            console.log(`Player ${playerId} won game ${gameId}`);
+          }
+        } else {
+          console.log(`Game ${gameId} does not exist`);
         }
         break;
 
@@ -42,8 +60,11 @@ wss.on('connection', (ws) => {
 });
 
 function evaluateGuess(guess, code) {
-  // Implement your guess evaluation logic here
-  return guess === code ? 'Perfect match!' : 'Some feedback message';
+  if (guess === code) {
+    return 'Perfect match!';
+  }
+  // Add logic to return meaningful feedback here
+  return 'Some feedback message';
 }
 
 module.exports = wss;
