@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import useWebSocket from 'react-use-websocket';
 
 function GamePlay() {
   const { gameId } = useParams();
+  const { state } = useLocation();
+  const playerId = state?.playerId || 'unknown';
   const [playerCode, setPlayerCode] = useState('');
   const [guess, setGuess] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -35,15 +37,13 @@ function GamePlay() {
       alert('Please enter a valid 4-digit code!');
       return;
     }
-    alert(gameId);
     sendMessage(JSON.stringify({
       type: 'lockIn',
       gameId,
-      playerId: 'player1',
+      playerId,
       data: { code: playerCode },
     }));
     alert('Your code is locked in!');
-    alert(gameId);
   };
 
   const handleGuess = () => {
@@ -54,7 +54,7 @@ function GamePlay() {
     sendMessage(JSON.stringify({
       type: 'guess',
       gameId,
-      playerId: 'player2',
+      playerId,
       data: { guess },
     }));
     setAttempts(attempts + 1);
