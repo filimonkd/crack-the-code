@@ -7,24 +7,25 @@ function GameLobby() {
   const navigate = useNavigate();
   const { sendMessage } = useWebSocket('ws://127.0.0.1:8080');
 
-  const handleJoinGame = () => {
+  const handleJoinGame = (playerId) => {
     sendMessage(JSON.stringify({
       type: 'joinGame',
       gameId,
-      playerId: 'player1', // This should be dynamically set based on the authenticated player
+      playerId,
     }));
-    navigate(`/game/${gameId}`);
+    navigate(`/game/${gameId}`, { state: { playerId } });
   };
 
   const handleCreateGame = () => {
+    const playerId = 'player1';
     const newGameId = Math.random().toString(36).substr(2, 9);
     setGameId(newGameId);
     sendMessage(JSON.stringify({
       type: 'createGame',
       gameId: newGameId,
-      playerId: 'player1',
+      playerId,
     }));
-    navigate(`/game/${newGameId}`);
+    navigate(`/game/${newGameId}`, { state: { playerId } });
   };
 
   return (
@@ -37,8 +38,11 @@ function GameLobby() {
         onChange={(e) => setGameId(e.target.value)}
         className="mb-4 p-2 border rounded"
       />
-      <button onClick={handleJoinGame} className="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4">
-        Join Game
+      <button onClick={() => handleJoinGame('player1')} className="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4">
+        Join Game as Player 1
+      </button>
+      <button onClick={() => handleJoinGame('player2')} className="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4">
+        Join Game as Player 2
       </button>
       <button onClick={handleCreateGame} className="bg-green-500 text-white font-bold py-2 px-4 rounded">
         Create New Game
